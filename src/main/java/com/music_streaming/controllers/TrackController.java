@@ -1,26 +1,26 @@
 package com.music_streaming.controllers;
 
-import com.music_streaming.services.TrackService;
+import com.music_streaming.services.YouTubeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
-@RequestMapping("/api/music")
+@RequestMapping("/api/youtube")
 public class TrackController {
 
     @Autowired
-    private TrackService musicService;
+    private YouTubeService youTubeService;
 
     @GetMapping("/search")
-    public Map<String, Object> searchTracks(@RequestParam String query) {
-        return musicService.searchTracks(query);
+    public ResponseEntity<?> searchSong(@RequestParam String query) {
+        return youTubeService.searchSongs(query);
     }
 
-    @GetMapping("/track/{id}")
-    public Map<String, Object> getTrackDetails(@PathVariable String id) {
-        return musicService.getTrackDetails(id);
+    @GetMapping("/details/{id}")
+    public ResponseEntity<?> getSongDetails(@PathVariable String id) {
+        return youTubeService.getSongDetails(id);
     }
 }
+
 
