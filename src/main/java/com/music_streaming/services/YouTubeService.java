@@ -3,6 +3,7 @@ package com.music_streaming.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.music_streaming.models.SongItem;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,10 @@ import java.util.Map;
 @Service
 public class YouTubeService {
 
-    private final String API_KEY = "AIzaSyAUrbZLja329Sbw2TVLOFSrEYVfwIprKq8";
+    @Value("${api_key}")
+    private String API_KEY;
     private final String BASE_URL = "https://www.googleapis.com/youtube/v3";
+
 
     public ResponseEntity<?> searchSongs(@RequestParam String query) {
         try {
