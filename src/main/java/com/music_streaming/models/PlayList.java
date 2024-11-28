@@ -1,6 +1,5 @@
 package com.music_streaming.models;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,13 +18,15 @@ public class PlayList {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Reference to the user who owns this playlist
+    private User user;
 
     @ManyToMany
     @JoinTable(
             name = "playlist_track",
             joinColumns = @JoinColumn(name = "playlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "track_id")
+            inverseJoinColumns = @JoinColumn(name = "track_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"playlist_id", "track_id"}
+            )
     )
-    private List<Track> tracks; // Tracks in this playlist
+    private List<Track> tracks;
 }
