@@ -5,6 +5,6 @@ RUN mvn clean package -DskipTests
 
 # Run stage
 FROM openjdk:21-jdk-slim
-COPY --from=build /target/music_streaming_backend-0.0.1-SNAPSHOT.jar demo.jar
+COPY --from=build /target/demo-0.0.1-SNAPSHOT.jar demo.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "music_streaming_backend.jar"]
+ENTRYPOINT ["java", "-jar", "demo.jar"]
