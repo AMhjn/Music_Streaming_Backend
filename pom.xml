@@ -96,6 +96,11 @@
 		<artifactId>jakarta.servlet-api</artifactId>
 		<scope>provided</scope>
 	</dependency>
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>9.1.1</version> <!-- Ensure the latest version -->
+		</dependency>
 	</dependencies>
 
 	<build>

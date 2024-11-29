@@ -40,4 +40,9 @@ public class Track {
         this.videoId = videoId;
         this.thumbnailUrl = thumbnailUrl;
     }
+    public Track(String title, String channelTitle,String thumbnailUrl ) {
+        this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
+        this.channelTitle = channelTitle;
+    }
 }

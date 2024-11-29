@@ -27,7 +27,7 @@ public class YouTubeService {
 
     @Value("${api_key}")
     private String API_KEY;
-    private final String BASE_URL = "https://www.googleapis.com/youtube/v3";
+//    private final String BASE_URL = "https://www.googleapis.com/youtube/v3";
 
 
     public ResponseEntity<?> searchSongs(@RequestParam String query) {

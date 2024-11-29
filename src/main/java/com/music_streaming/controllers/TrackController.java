@@ -6,6 +6,7 @@ import com.music_streaming.services.YouTubeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -35,9 +36,12 @@ public class TrackController {
     }
 
     @PostMapping("/upload/{id}")
-    public ResponseEntity<?> uploadSong(@PathVariable String id, @RequestBody Track song) throws Exception {
+    public ResponseEntity<?> uploadSong(@PathVariable String id, @RequestParam("title") String title,
+                                        @RequestParam("channelTitle") String channelTitle,
+                                        @RequestParam(value = "thumbnailUrl", required = false) String thumbnailUrl,
+                                        @RequestParam("file") MultipartFile file) throws Exception {
         Long userId = Long.valueOf(id);
-        return trackService.uploadSong(userId,song);
+        return trackService.uploadSong(userId,title,channelTitle,thumbnailUrl,file);
     }
 
     @GetMapping("/get-uploads/{id}")
