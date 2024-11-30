@@ -15,11 +15,15 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class FirebaseConfig {
 
+    // Load the FIREBASE_CONFIG environment variable
+    @Value("${FIREBASE_CONFIG}")
+    private String FIREBASE_CONFIG;
+
     @PostConstruct
     public void initialize() {
         try {
             // Load JSON from environment variable
-            String firebaseConfig = System.getenv("FIREBASE_CONFIG");
+            String firebaseConfig = FIREBASE_CONFIG;
             if (firebaseConfig == null) {
                 throw new IllegalStateException("FIREBASE_CONFIG environment variable is not set");
             }
