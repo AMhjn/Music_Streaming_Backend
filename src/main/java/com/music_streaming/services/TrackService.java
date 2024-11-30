@@ -1,6 +1,7 @@
 package com.music_streaming.services;
 
 import com.google.firebase.cloud.StorageClient;
+import com.music_streaming.models.ExceptionResponse;
 import com.music_streaming.models.SongItem;
 import com.music_streaming.models.Track;
 import com.music_streaming.models.User;
@@ -37,7 +38,7 @@ public class TrackService {
             Optional<User> user = userRepository.findById(userId);
 
             if(user.isEmpty()){
-                return new ResponseEntity<>("UserID not found !",HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new ExceptionResponse("UserID not found !"),HttpStatus.NOT_FOUND);
             }
 
             // Upload song to firebase and get the public url
@@ -62,20 +63,24 @@ public class TrackService {
             return ResponseEntity.ok(song);
         }
         catch (Exception e){
-            System.out.print(e);
-            return ResponseEntity.ok(e.getMessage());
+            return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.NOT_IMPLEMENTED);
         }
 
 
     }
 
     public ResponseEntity<?> getUploadedSongs(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
+        try {
 
-        if(user.isEmpty()){
-            return new ResponseEntity<>("UserID not found !",HttpStatus.NOT_FOUND);
+            Optional<User> user = userRepository.findById(userId);
+
+            if(user.isEmpty()){
+                return new ResponseEntity<>(new ExceptionResponse("UserID not found !"),HttpStatus.NOT_FOUND);
+            }
+            List<Track> uploadedSOngs = trackRepository.findByUploadedBy(userId);
+            return ResponseEntity.ok(uploadedSOngs);
+        }catch(Exception e){
+            return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.NOT_IMPLEMENTED);
         }
-        List<Track> uploadedSOngs = trackRepository.findByUploadedBy(userId);
-        return ResponseEntity.ok(uploadedSOngs);
     }
 }

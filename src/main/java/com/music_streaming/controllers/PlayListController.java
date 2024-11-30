@@ -9,6 +9,7 @@ import com.music_streaming.repositories.TrackRepository;
 import com.music_streaming.repositories.UserRepository;
 import com.music_streaming.services.PlayListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,45 +40,51 @@ public class PlayListController {
         Long userId = Long.valueOf(payload.get("userId"));
         String name = payload.get("name");
 
-
-        PlayList createdPlaylist = playListService.createPlaylist(userId, name);
-
-        return ResponseEntity.ok(createdPlaylist);
+        return playListService.createPlaylist(userId, name);
     }
 
 
     @PostMapping("/playlist/{playlistId}/add-song")
     public ResponseEntity<?> addSongToPlaylist(@PathVariable Long playlistId, @RequestBody SongItem songItem) {
-        PlayList playlist = playListRepository.findById(playlistId)
-                .orElseThrow(() -> new RuntimeException("Playlist not found"));
 
         Track track = new Track(songItem.getVideoId(), songItem.getTitle(), songItem.getThumbnailUrl(), songItem.getChannelTitle());
-        playListService.addTrackToPlaylist(playlistId,track);
+        return playListService.addTrackToPlaylist(playlistId,track);
 
-        return ResponseEntity.ok(playlist);
     }
 
 
     @GetMapping("/user/{userId}/playlists")
     public ResponseEntity<?> getUserPlaylists(@PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
-
-        return ResponseEntity.ok(user.getPlaylists());
+       return playListService.getUserPlaylists(userId);
     }
 
 
     @DeleteMapping("/playlist/{playlistId}/remove-song/{id}")
     public ResponseEntity<?> removeSongFromPlaylist(@PathVariable Long playlistId, @PathVariable String id) {
 
-        Long idToDelete = Long.valueOf(id);
-        PlayList playlist = playListRepository.findById(playlistId)
-                .orElseThrow(() -> new RuntimeException("Playlist not found"));
+     try{
+         Long idToDelete = Long.valueOf(id);
+         PlayList playlist = playListRepository.findById(playlistId)
+                 .orElseThrow(() -> new RuntimeException("Playlist not found"));
 
-        playlist.getTracks().removeIf(track -> track.getId().equals(idToDelete));
-        playlist = playListRepository.save(playlist);
+         playlist.getTracks().removeIf(track -> track.getId().equals(idToDelete));
+         playlist = playListRepository.save(playlist);
 
-        return ResponseEntity.ok(playlist);
+         return ResponseEntity.ok(playlist);
+     }
+     catch(Exception e){
+         return new ResponseEntity<>("Unable To Remove Song!", HttpStatus.NOT_IMPLEMENTED);
+     }
+
     }
+
+    @DeleteMapping("/playlist/remove/{playlistId}")
+    public ResponseEntity<?> removePlaylist(@PathVariable Long playlistId) {
+
+        return playListService.deletePlaylist(playlistId);
+
+    }
+
 
 }

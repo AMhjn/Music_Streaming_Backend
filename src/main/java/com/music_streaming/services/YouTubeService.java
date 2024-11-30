@@ -2,10 +2,13 @@ package com.music_streaming.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.music_streaming.models.ExceptionResponse;
 import com.music_streaming.models.SongItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +30,6 @@ public class YouTubeService {
 
     @Value("${api_key}")
     private String API_KEY;
-//    private final String BASE_URL = "https://www.googleapis.com/youtube/v3";
 
 
     public ResponseEntity<?> searchSongs(@RequestParam String query) {
@@ -70,55 +72,66 @@ public class YouTubeService {
         } catch (HttpClientErrorException e) {
             return ResponseEntity.status(e.getStatusCode()).body("Error occurred: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error occurred: " + e.getMessage());
+            return ResponseEntity.status(500).body(new ExceptionResponse("Error occurred: " + e.getMessage()));
         }
     }
 
 
     public ResponseEntity<?> getSongDetails(@PathVariable String id) {
-        String url = "https://www.googleapis.com/youtube/v3/videos"
-                + "?part=snippet,contentDetails&id=" + id
-                + "&key=" + API_KEY;
+        try{
+            String url = "https://www.googleapis.com/youtube/v3/videos"
+                    + "?part=snippet,contentDetails&id=" + id
+                    + "&key=" + API_KEY;
 
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
+            RestTemplate restTemplate = new RestTemplate();
+            String response = restTemplate.getForObject(url, String.class);
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     public ResponseEntity<?> fetchPopularSongs() throws IOException {
-        // YouTube API URL for fetching popular videos
-        String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&videoCategoryId=10&maxResults=30&key="
-                + API_KEY;
 
-        // Fetch data from YouTube API using RestTemplate
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(url, String.class);
+        try{
 
-        // Parse the YouTube API response to extract video details
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response);
-        JsonNode items = root.path("items");
+            // YouTube API URL for fetching popular videos
+            String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&videoCategoryId=10&maxResults=30&key="
+                    + API_KEY;
 
-        // Prepare a list of song details (videoId, title, channelName, thumbnail)
-        List<Map<String, String>> songResults = new ArrayList<>();
-        for (JsonNode item : items) {
-            String videoId = item.path("id").asText();
-            String title = item.path("snippet").path("title").asText();
-            String channelName = item.path("snippet").path("channelTitle").asText();
-            String thumbnail = item.path("snippet").path("thumbnails").path("default").path("url").asText();
+            // Fetch data from YouTube API using RestTemplate
+            RestTemplate restTemplate = new RestTemplate();
+            String response = restTemplate.getForObject(url, String.class);
 
-            // Add video details to the result list
-            Map<String, String> song = new HashMap<>();
-            song.put("videoId", videoId);
-            song.put("title", title);
-            song.put("channelName", channelName);
-            song.put("thumbnail", thumbnail);
-            songResults.add(song);
+            // Parse the YouTube API response to extract video details
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(response);
+            JsonNode items = root.path("items");
+
+            // Prepare a list of song details (videoId, title, channelName, thumbnail)
+            List<Map<String, String>> songResults = new ArrayList<>();
+            for (JsonNode item : items) {
+                String videoId = item.path("id").asText();
+                String title = item.path("snippet").path("title").asText();
+                String channelName = item.path("snippet").path("channelTitle").asText();
+                String thumbnail = item.path("snippet").path("thumbnails").path("default").path("url").asText();
+
+                // Add video details to the result list
+                Map<String, String> song = new HashMap<>();
+                song.put("videoId", videoId);
+                song.put("title", title);
+                song.put("channelName", channelName);
+                song.put("thumbnail", thumbnail);
+                songResults.add(song);
+            }
+
+            // Return the list of songs (videos) as JSON response
+            return ResponseEntity.ok(songResults);
         }
-
-        // Return the list of songs (videos) as JSON response
-        return ResponseEntity.ok(songResults);
+        catch(Exception e){
+            return new ResponseEntity<>(new ExceptionResponse(e.getMessage()),HttpStatus.NOT_FOUND);
+        }
     }
 
 }
