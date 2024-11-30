@@ -7,18 +7,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class FirebaseConfig {
 
-    @Value("${FIREBASE_FILE}")
-    private  String FIREBASE_FILE;
     @PostConstruct
     public void initialize() {
         try {
-            FileInputStream serviceAccount = new FileInputStream("src/main/resources/"+FIREBASE_FILE);
+            // Load JSON from environment variable
+            String firebaseConfig = System.getenv("FIREBASE_CONFIG");
+            if (firebaseConfig == null) {
+                throw new IllegalStateException("FIREBASE_CONFIG environment variable is not set");
+            }
+
+            // Convert JSON string to InputStream
+            ByteArrayInputStream serviceAccount = new ByteArrayInputStream(firebaseConfig.getBytes(StandardCharsets.UTF_8));
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))

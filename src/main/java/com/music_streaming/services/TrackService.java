@@ -62,6 +62,7 @@ public class TrackService {
             return ResponseEntity.ok(song);
         }
         catch (Exception e){
+            System.out.print(e);
             return ResponseEntity.ok(e.getMessage());
         }
 
