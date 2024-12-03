@@ -37,7 +37,8 @@ public class YouTubeService {
             // Construct YouTube API search URL
             String url = "https://www.googleapis.com/youtube/v3/search"
                     + "?part=snippet&type=video&q=" + URLEncoder.encode(query, StandardCharsets.UTF_8)
-                    + "&key=" + API_KEY;
+                    + "&key=" + API_KEY
+                    + "&maxResults=10";
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -86,7 +87,30 @@ public class YouTubeService {
             RestTemplate restTemplate = new RestTemplate();
             String response = restTemplate.getForObject(url, String.class);
 
-            return ResponseEntity.ok(response);
+            // Parse the YouTube API response to extract video details
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(response);
+            JsonNode items = root.path("items");
+
+            // Prepare a list of song details (videoId, title, channelName, thumbnail)
+            List<Map<String, String>> songResults = new ArrayList<>();
+            for (JsonNode item : items) {
+                String videoId = item.path("id").asText();
+                String title = item.path("snippet").path("title").asText();
+                String channelName = item.path("snippet").path("channelTitle").asText();
+                String thumbnail = item.path("snippet").path("thumbnails").path("default").path("url").asText();
+
+                // Add video details to the result list
+                Map<String, String> song = new HashMap<>();
+                song.put("videoId", videoId);
+                song.put("title", title);
+                song.put("channelName", channelName);
+                song.put("thumbnail", thumbnail);
+                songResults.add(song);
+            }
+
+            // Return the list of songs (videos) as JSON response
+            return ResponseEntity.ok(songResults);
         }catch(Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -97,7 +121,7 @@ public class YouTubeService {
         try{
 
             // YouTube API URL for fetching popular videos
-            String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&videoCategoryId=10&maxResults=30&key="
+            String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&videoCategoryId=10&maxResults=100&key="
                     + API_KEY;
 
             // Fetch data from YouTube API using RestTemplate
