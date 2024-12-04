@@ -50,6 +50,7 @@ public class UserService {
                 String token = JwtUtil.generateToken(username);
                 Map<String, Object> response = new HashMap<>();
                 response.put("token", token);
+                response.put("userId", user.get().getId());
                 return new ResponseEntity<>(response,HttpStatus.OK);
             }
             throw new RuntimeException("Invalid credentials");
