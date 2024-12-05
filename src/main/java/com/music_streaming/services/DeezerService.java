@@ -9,6 +9,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,21 +60,19 @@ public class DeezerService {
                     TrackDTO track = new TrackDTO();
                     // Safely retrieve and set values
                     if( trackNode.has("id") && trackNode.get("id").asText() != null ){
-                        track.setId( trackNode.get("id").asText());
+                        track.setId( new BigInteger(trackNode.get("id").asText()));
                     }
                     else{
                         continue;
                     }
 
                     if( trackNode.has("title") && trackNode.get("title").asText() != null ){
-                        track.setId( trackNode.get("title").asText());
+                        track.setTitle( trackNode.get("title").asText());
                     }
                     else{
                         continue;
                     }
 
-
-                    track.setTitle(trackNode.has("title") ? trackNode.get("title").asText() : null);
 
                     // Check nested artist object
                     JsonNode artistNode = trackNode.get("artist");
@@ -134,7 +133,7 @@ public class DeezerService {
 
             TrackDTO track = new TrackDTO();
             // Safely retrieve and set values
-            track.setId(trackNode.has("id") ? trackNode.get("id").asText() : null);
+            track.setId(trackNode.has("id") ? new BigInteger(trackNode.get("id").asText()) : null);
             track.setTitle(trackNode.has("title") ? trackNode.get("title").asText() : null);
 
             // Check nested artist object
