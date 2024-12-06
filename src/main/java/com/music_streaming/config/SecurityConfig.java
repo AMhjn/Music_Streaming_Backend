@@ -46,9 +46,9 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-//                .allowedOrigins("http://10.0.2.2:8080","http://10.0.2.2","http://76.38.163.141:8080","http://192.168.1.250:33946","http://localhost:8080","http://127.0.0.1:8080","http://music-streaming-backend-uh0v.onrender.com/") // Emulator URL
+                .allowedOrigins("http://10.0.2.2:8080","http://10.0.2.2","http://76.38.163.141:8080","http://192.168.1.250:33946","http://localhost:8080","http://127.0.0.1:8080","http://music-streaming-backend-uh0v.onrender.com/") // Emulator URL
 //                .allowedOrigins("*")
-                .allowedOrigins("http://*:8080")
+                .allowedOrigins("http://10.0.2.2:*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
