@@ -36,10 +36,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**") // Allow all endpoints
-                .allowedOrigins("*") // Allow all origins
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow all HTTP methods
-                .allowedHeaders("*") // Allow all headers
-                .allowCredentials(true); // Optional: If you need to support cookies or credentials
+        registry.addMapping("/**")
+                .allowedOrigins("http://10.0.2.2:8080") // Emulator URL
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
