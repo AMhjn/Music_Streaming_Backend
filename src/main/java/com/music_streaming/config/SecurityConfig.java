@@ -1,6 +1,5 @@
 package com.music_streaming.config;
 
-
 import com.music_streaming.middlewares.JwtFilter;
 import com.music_streaming.middlewares.JwtUtil;
 import org.springframework.context.annotation.Bean;
@@ -12,16 +11,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.firewall.HttpFirewall;
-import org.springframework.security.web.firewall.StrictHttpFirewall;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
-    @Bean
-    public HttpFirewall allowAllFirewall() {
-        return new StrictHttpFirewall();
-    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // Uses BCrypt hashing algorithm
@@ -37,5 +32,14 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class); // Add your JWT filter
 
         return http.build();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // Allow all endpoints
+                .allowedOrigins("*") // Allow all origins
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow all HTTP methods
+                .allowedHeaders("*") // Allow all headers
+                .allowCredentials(true); // Optional: If you need to support cookies or credentials
     }
 }
