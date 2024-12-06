@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/youtube")
+@RequestMapping("/api/firebase")
 public class TrackController {
 
 //    @Autowired
@@ -20,13 +20,9 @@ public class TrackController {
 //    @Autowired
 //    private DeezerService deezerService;
 //
-//    @Autowired
-//    private TrackService trackService;
+    @Autowired
+    private TrackService trackService;
 //
-//    @GetMapping("/search")
-//    public ResponseEntity<?> searchSong(@RequestParam String query) {
-//        return deezerService.searchTracks(query);
-//    }
 //
 //    @GetMapping("/details/{id}")
 //    public ResponseEntity<?> getSongDetails(@PathVariable String id) {
@@ -38,20 +34,20 @@ public class TrackController {
 //        return youTubeService.fetchPopularSongs();
 //    }
 //
-//    @PostMapping("/upload/{id}")
-//    public ResponseEntity<?> uploadSong(@PathVariable String id, @RequestParam("title") String title,
-//                                        @RequestParam("channelTitle") String channelTitle,
-//                                        @RequestParam(value = "thumbnailUrl", required = false) String thumbnailUrl,
-//                                        @RequestParam("file") MultipartFile file) throws Exception {
-//        Long userId = Long.valueOf(id);
-//        return trackService.uploadSong(userId,title,channelTitle,thumbnailUrl,file);
-//    }
-//
-//    @GetMapping("/get-uploads/{id}")
-//    public ResponseEntity<?> getUploadedSong(@PathVariable String id) throws Exception {
-//        Long userId = Long.valueOf(id);
-//        return trackService.getUploadedSongs(userId);
-//    }
+    @PostMapping("/upload/{id}")
+    public ResponseEntity<?> uploadSong(@PathVariable String id, @RequestParam("title") String title,
+                                        @RequestParam("channelTitle") String channelTitle,
+                                        @RequestParam(value = "thumbnailUrl", required = false) String thumbnailUrl,
+                                        @RequestParam("file") MultipartFile file) throws Exception {
+        Long userId = Long.valueOf(id);
+        return trackService.uploadSong(userId,title,channelTitle,thumbnailUrl,file);
+    }
+
+    @GetMapping("/get-uploads/{id}")
+    public ResponseEntity<?> getUploadedSong(@PathVariable String id) throws Exception {
+        Long userId = Long.valueOf(id);
+        return trackService.getUploadedSongs(userId);
+    }
 }
 
 
