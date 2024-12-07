@@ -47,8 +47,6 @@ public class SecurityConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://10.0.2.2:8080","http://10.0.2.2","http://76.38.163.141:8080","http://192.168.1.250:33946","http://localhost:8080","http://127.0.0.1:8080","http://music-streaming-backend-uh0v.onrender.com/") // Emulator URL
-//                .allowedOrigins("*")
-                .allowedOrigins("http://10.0.2.2:*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
@@ -56,24 +54,5 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration corsConfig = new CorsConfiguration();
-//        corsConfig.addAllowedOrigin("http://10.0.2.2:8080");
-//        corsConfig.addAllowedOrigin("http://localhost:8080");
-//        corsConfig.addAllowedOrigin("http://10.0.2.2"); // Emulator IP
-//        corsConfig.addAllowedOrigin("http://76.38.163.141:8080"); // Emulator IP
-//        corsConfig.addAllowedOrigin("http://192.168.1.250:33946"); // Emulator IP
-//        corsConfig.addAllowedOrigin("http://127.0.0.1:8080"); // Emulator IP
-//        corsConfig.addAllowedOrigin("http://music-streaming-backend-uh0v.onrender.com/"); // Emulator IP
-//        corsConfig.addAllowedMethod("*");  // Allow all HTTP methods
-//        corsConfig.addAllowedHeader("*");  // Allow all headers
-//        corsConfig.setAllowCredentials(true);  // Allow credentials
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", corsConfig);  // Apply CORS configuration to all endpoints
-//
-//        return source;
-//    }
 
 }
