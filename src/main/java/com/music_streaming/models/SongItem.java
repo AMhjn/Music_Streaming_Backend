@@ -1,17 +1,15 @@
 package com.music_streaming.models;
 
-import java.util.List;
-
 public class SongItem {
     private String title;
-    private String videoId;
+    private String songUrl;
     private String thumbnailUrl;
     private String channelTitle;
 
     // Constructor
-    public SongItem(String title, String videoId, String thumbnailUrl, String channelTitle) {
+    public SongItem(String title, String songUrl, String thumbnailUrl, String channelTitle) {
         this.title = title;
-        this.videoId = videoId;
+        this.songUrl = songUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.channelTitle = channelTitle;
     }
@@ -25,12 +23,12 @@ public class SongItem {
         this.title = title;
     }
 
-    public String getVideoId() {
-        return videoId;
+    public String getSongUrl() {
+        return songUrl;
     }
 
-    public void setVideoId(String videoId) {
-        this.videoId = videoId;
+    public void setSongUrl(String songUrl) {
+        this.songUrl = songUrl;
     }
 
     public String getThumbnailUrl() {

@@ -34,13 +34,15 @@ public class Track {
     public Track() {
     }
 
-    public Track(String title, String channelTitle, String videoId, String thumbnailUrl) {
+
+    public Track(String title, String channelTitle,String thumbnailUrl, String songUrlOnFirebase) {
         this.title = title;
-        this.channelTitle = channelTitle;
-        this.videoId = videoId;
         this.thumbnailUrl = thumbnailUrl;
+        this.channelTitle = channelTitle;
+        this.songUrlOnFirebase = songUrlOnFirebase;
     }
-    public Track(String title, String channelTitle,String thumbnailUrl ) {
+
+    public Track(String title, String channelTitle, String thumbnailUrl) {
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
         this.channelTitle = channelTitle;

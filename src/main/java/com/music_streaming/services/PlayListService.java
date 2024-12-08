@@ -53,7 +53,7 @@ public class PlayListService {
             if(userOptional.isEmpty()){
                 return new ResponseEntity<>(new ExceptionResponse("User Not FOund !"), HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(userOptional.get().getPlaylists(),HttpStatus.FOUND);
+            return new ResponseEntity<>(userOptional.get().getPlaylists(),HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(new ExceptionResponse("Unable to fetch user Playlists!"), HttpStatus.BAD_REQUEST);
         }

@@ -38,7 +38,7 @@ public class TrackService {
             Optional<User> user = userRepository.findById(userId);
 
             if(user.isEmpty()){
-                return new ResponseEntity<>(new ExceptionResponse("UserID not found !"),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(new ExceptionResponse("UserID not found !"),HttpStatus.BAD_REQUEST);
             }
 
             // Upload song to firebase and get the public url

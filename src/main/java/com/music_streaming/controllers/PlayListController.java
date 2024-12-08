@@ -47,7 +47,7 @@ public class PlayListController {
     @PostMapping("/playlist/{playlistId}/add-song")
     public ResponseEntity<?> addSongToPlaylist(@PathVariable Long playlistId, @RequestBody SongItem songItem) {
 
-        Track track = new Track(songItem.getVideoId(), songItem.getTitle(), songItem.getThumbnailUrl(), songItem.getChannelTitle());
+        Track track = new Track(songItem.getTitle(),songItem.getChannelTitle(), songItem.getThumbnailUrl(),songItem.getSongUrl());
         return playListService.addTrackToPlaylist(playlistId,track);
 
     }
