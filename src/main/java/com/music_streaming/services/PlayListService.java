@@ -84,4 +84,18 @@ public class PlayListService {
             return new ResponseEntity<>(new ExceptionResponse(e.getMessage()), HttpStatus.NOT_IMPLEMENTED);
         }
     }
+
+    public ResponseEntity<?> getTracksfromPlaylists(Long playlistId) {
+
+        try{
+            Optional<PlayList> userOptional = playlistRepository.findById(playlistId);
+
+            if(userOptional.isEmpty()){
+                return new ResponseEntity<>(new ExceptionResponse("Playlist Not Found !"), HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(userOptional.get().getTracks(),HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(new ExceptionResponse("Unable to fetch user Playlists!"), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

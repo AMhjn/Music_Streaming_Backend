@@ -59,6 +59,12 @@ public class PlayListController {
        return playListService.getUserPlaylists(userId);
     }
 
+    @GetMapping("/tracks/{playlistId}")
+    public ResponseEntity<?> getTracksfromPlaylists(@PathVariable Long playlistId) {
+
+        return playListService.getTracksfromPlaylists(playlistId);
+    }
+
 
     @DeleteMapping("/playlist/{playlistId}/remove-song/{id}")
     public ResponseEntity<?> removeSongFromPlaylist(@PathVariable Long playlistId, @PathVariable String id) {
